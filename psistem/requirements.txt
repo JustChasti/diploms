@@ -2,3 +2,5 @@ loguru
 fastapi
 uvicorn
 requests
+pymongo
+jinja2
