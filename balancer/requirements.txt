@@ -1,0 +1,6 @@
+fastapi
+loguru
+uvicorn
+requests
+selenium
+pymongo
