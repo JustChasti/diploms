@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from loguru import logger
 
 from views.browser import browser_router
+from views.main import main_router
 from config import my_host
 
 
@@ -10,6 +11,7 @@ logger.add("data.log", rotation="100 MB")
 
 app = FastAPI()
 app.include_router(browser_router)
+app.include_router(main_router)
 
 
 @app.on_event("startup")
