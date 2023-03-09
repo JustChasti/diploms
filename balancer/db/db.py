@@ -10,6 +10,7 @@ while True:
             base_host, base_port
         )[client_name]
         users = client['users']
+        tasks = client['tasks']
         break
     except Exception as e:
         logger.exception(e)

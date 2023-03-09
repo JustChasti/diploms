@@ -4,3 +4,4 @@ uvicorn
 requests
 selenium
 pymongo
+pika
