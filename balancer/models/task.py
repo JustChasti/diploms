@@ -49,8 +49,9 @@ class TaskModel(BaseModel):
             'complete': False,
 
         })
-        logger.info(self.created_at)
+        # logger.info(self.created_at)
         if same_task:
+            logger.info(same_task)
             if same_task['created_at'] + timedelta(hours=12) > datetime.now():
                 return False
 
