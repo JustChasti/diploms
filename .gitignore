@@ -3,3 +3,4 @@ psistem/test.log
 /psistem/venv
 /balancer/venv
 balancer/.vscode/settings.json
+balancer/test.py

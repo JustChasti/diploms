@@ -3,6 +3,7 @@ from threading import Thread
 import json
 from multiprocessing import Process
 from bson.objectid import ObjectId
+import aiochan as ac
 
 import uvicorn
 from fastapi import FastAPI
@@ -33,8 +34,9 @@ def assign_task(ch, method, properties, body):
         else:
             sleep(1)
 
-    host_thread = Process(target=get_html, args=(host, task))
-    host_thread.start()
+    # host_thread = Process(target=get_html, args=(host, task))
+    # host_thread.start()
+    ac.run_in_thread(get_html(host, task))
 
 
 def starter():
