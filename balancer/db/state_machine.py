@@ -26,7 +26,7 @@ class StateMachine(object):
     @classmethod
     def set_state(cls, host_name: str, open: bool):
         for host in cls.hosts:
-            if host['name'] == host_name:
+            if host['hostname'] == host_name:
                 host['open'] = open
                 return {'succes': True}
         return {'succes': False}

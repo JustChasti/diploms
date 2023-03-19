@@ -1,20 +1,19 @@
 from time import sleep
 from threading import Thread
 import json
-from multiprocessing import Process
-from bson.objectid import ObjectId
-import aiochan as ac
 
 import uvicorn
 from fastapi import FastAPI
 from loguru import logger
 from pika import BlockingConnection, ConnectionParameters
+import aiochan as ac
 
 from views.browser import browser_router
 from views.main import main_router
 from config import my_host, rabbit_host, queue_tasks_name
-from db.db import create_host_list, hosts
+from db.db import create_host_list
 from modules.parser import get_html
+from db.state_machine import StateMachine
 
 
 logger.add("data.log", rotation="100 MB", enqueue=True)
@@ -27,15 +26,11 @@ app.include_router(main_router)
 def assign_task(ch, method, properties, body):
     task = json.loads(body.decode("utf-8"))
     while True:
-        host = hosts.find_one({'locked': False})
-        logger.info(f"{host['hostname']} / {task['task_id']}")
+        host = StateMachine.get_state()
         if host:
             break
         else:
             sleep(1)
-
-    # host_thread = Process(target=get_html, args=(host, task))
-    # host_thread.start()
     ac.run_in_thread(get_html(host, task))
 
 
