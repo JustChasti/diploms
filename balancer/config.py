@@ -16,3 +16,4 @@ selenium_hosts = (
 )
 
 page_load_timeout = 15
+page_dir = 'files'
