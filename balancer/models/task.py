@@ -6,10 +6,11 @@ from typing import Literal, Optional
 from pydantic import BaseModel, validator
 from bson.objectid import ObjectId
 from pika import BlockingConnection, ConnectionParameters
+from fastapi.responses import JSONResponse, FileResponse
 
 from db.db import users, tasks
 from modules.decorators import default_decorator
-from config import rabbit_host, queue_tasks_name
+from config import rabbit_host, queue_tasks_name, page_dir
 
 
 class TaskModel(BaseModel):
@@ -100,3 +101,25 @@ class TaskModel(BaseModel):
             return {
                 'message': 'you cannot add more than 2 identical tasks in 12 hours if the previous task has not been completed'
             }
+
+
+@default_decorator('get task error')
+def get_completed_task(user_id, task_id):
+    task = tasks.find_one({
+            '_id': ObjectId(task_id),
+            'user_id': user_id,
+            'complete': True,
+    })
+    if task:
+        headers = {
+            'task_id': task['_id'],
+            'time': str(task['comleted_at'] - task['started_at']),
+            'element': task['element'],
+            'element_type': task['element_type']
+
+        }
+        return FileResponse(path=f"{page_dir}/{task_id}.html", headers=headers)
+    else:
+        return JSONResponse({
+            'error': 'there is no any completed task, with this parameters'
+        })
