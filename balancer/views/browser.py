@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from models.task import TaskModel
+from models.task import TaskModel, get_completed_task
 
 
 browser_router = APIRouter()
@@ -13,4 +13,4 @@ async def add_new_task(task: TaskModel):
 
 @browser_router.get('/get-task/{user_id}/{task_id}')
 async def get_task(user_id, task_id):
-    pass
+    return get_completed_task(user_id, task_id)

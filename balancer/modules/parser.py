@@ -1,5 +1,6 @@
 import codecs
 from bson.objectid import ObjectId
+from datetime import datetime
 
 from db.db import tasks
 from db.state_machine import StateMachine
@@ -20,11 +21,14 @@ async def get_html(host, task):
         )
     except Exception as e:
         data = f'<p>{e}<p>'
-    file = codecs.open(f'{page_dir}/{task["task_id"]}.html', "w", "utf−8")
-    file.write(data)
-    file.close()
+    with open(
+        file=f'{page_dir}/{task["task_id"]}.html',
+        mode="w",
+        encoding="utf−8"
+    ) as file:
+        file.write(data)
     tasks.update_one(
         {'_id': ObjectId(task['task_id'])},
-        {"$set": {'complete': True}}
+        {"$set": {'complete': True, 'completed_at': datetime.now()}}
     )
     StateMachine.set_state(host['hostname'], True)

@@ -1,5 +1,7 @@
 import json
 from datetime import datetime, timedelta
+import os
+from pathlib import Path
 
 from loguru import logger
 from typing import Literal, Optional
@@ -103,6 +105,17 @@ class TaskModel(BaseModel):
             }
 
 
+def retur_html_file(path, headers):
+    # просто удалять файл после запроса нельзя, нужно создать клинер
+    # fastapi пытается вернуть удаленный файл
+    check = Path(path)
+    if check.is_file():
+        return FileResponse(path=path, headers=headers)
+    return JSONResponse({
+        'error': 'task not found error'
+    })
+
+
 @default_decorator('get task error')
 def get_completed_task(user_id, task_id):
     task = tasks.find_one({
@@ -112,13 +125,14 @@ def get_completed_task(user_id, task_id):
     })
     if task:
         headers = {
-            'task_id': task['_id'],
-            'time': str(task['comleted_at'] - task['started_at']),
+            'task_id': str(task['_id']),
+            'time': str(task['completed_at'] - task['created_at']),
             'element': task['element'],
             'element_type': task['element_type']
 
         }
-        return FileResponse(path=f"{page_dir}/{task_id}.html", headers=headers)
+        return retur_html_file(path=f"{page_dir}/{task_id}.html", headers=headers)
+
     else:
         return JSONResponse({
             'error': 'there is no any completed task, with this parameters'

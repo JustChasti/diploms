@@ -35,6 +35,6 @@ class UserModel(BaseModel):
             return False
         else:
             user = users.insert_one(
-                self.__dict__  # добавить хранение паролей
+                self.__dict__  # добавить хранение паролей хэшированное
             )
             return user.inserted_id
