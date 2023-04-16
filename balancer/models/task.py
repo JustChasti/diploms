@@ -20,6 +20,7 @@ class TaskModel(BaseModel):
     url: str
     created_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
+    parse_time: Optional[datetime] = None
     element_type: Literal['CLASS_NAME', 'CSS_SELECTOR', 'XPATH']
     element: str
     complete: bool = False
@@ -52,7 +53,6 @@ class TaskModel(BaseModel):
             'complete': False,
 
         })
-        # logger.info(self.created_at)
         if same_task:
             logger.info(same_task)
             if same_task['created_at'] + timedelta(hours=12) > datetime.now():
@@ -81,11 +81,12 @@ class TaskModel(BaseModel):
             body=json.dumps(message)
         )
         connection.close()
+        estimated_time, max_time = self.get_uncomplited_time()
         return {
-            'message': f'Task {task_id} added, estimated waiting time: {0}, maximum waiting time {0}',
+            'message': f'Task {task_id} added, estimated waiting time: {estimated_time} seconds, maximum waiting time {max_time} seconds',
             'task_id': str(task_id),
-            'estimated': 0,
-            'maximum': 0
+            'estimated': estimated_time,
+            'maximum': max_time
         }
 
     @default_decorator('add task error')
@@ -103,6 +104,28 @@ class TaskModel(BaseModel):
             return {
                 'message': 'you cannot add more than 2 identical tasks in 12 hours if the previous task has not been completed'
             }
+
+    @default_decorator('get tasks time error')
+    def get_uncomplited_time(self):
+        task_filtered = tasks.find({
+            'created_at': {"$gt": datetime.now() - timedelta(hours=12)},
+            'complete': False,
+        })
+        max_time = int(len(list(task_filtered))) * 15
+        authors = task_filtered.distinct('user_id')
+        unic_authors = set(authors)
+        estimated_time = 15
+        print(authors)
+        for i in unic_authors:
+            completed_tasks = tasks.find({
+                'user_id': i
+            })
+            author_estimated = 0
+            for task_time in  completed_tasks.distinct('parse_time'):
+                if task_time:
+                    author_estimated += task_time
+            estimated_time += int(author_estimated/len(list(completed_tasks)))
+        return [estimated_time, max_time]
 
 
 def retur_html_file(path, headers):
@@ -126,7 +149,8 @@ def get_completed_task(user_id, task_id):
     if task:
         headers = {
             'task_id': str(task['_id']),
-            'time': str(task['completed_at'] - task['created_at']),
+            'created_at': str(task['created_at']),
+            'parse_time': str(task['parse_time']),
             'element': task['element'],
             'element_type': task['element_type']
 

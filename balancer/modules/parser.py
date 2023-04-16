@@ -14,6 +14,7 @@ async def get_html(host, task):
     # Task scheme
     # task_id, url, type, element
     StateMachine.set_state(host['hostname'], False)
+    started_at = datetime.now()
     try:
         data = extract(
             url=task['url'], hostname=host['hostname'],
@@ -29,6 +30,11 @@ async def get_html(host, task):
         file.write(data)
     tasks.update_one(
         {'_id': ObjectId(task['task_id'])},
-        {"$set": {'complete': True, 'completed_at': datetime.now()}}
+        {"$set": {
+            'complete': True,
+            'parse_time': int((datetime.now() - started_at).seconds),
+            'completed_at': datetime.now()
+            }
+        }
     )
     StateMachine.set_state(host['hostname'], True)
