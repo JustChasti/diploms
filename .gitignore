@@ -4,3 +4,5 @@ psistem/test.log
 /balancer/venv
 balancer/.vscode/settings.json
 balancer/test.py
+auto_proxy/venv
+tg_data_parser/venv
