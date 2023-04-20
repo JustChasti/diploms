@@ -6,3 +6,10 @@ balancer/.vscode/settings.json
 balancer/test.py
 auto_proxy/venv
 tg_data_parser/venv
+tg_data_parser/session_name.session
+tg_data_parser/__pycache__/config.cpython-310.pyc
+tg_data_parser/.vscode/settings.json
+tg_data_parser/crawler/__pycache__/client.cpython-310.pyc
+tg_data_parser/crawler/__pycache__/data_crawler.cpython-310.pyc
+.gitignore
+tg_data_parser/source/__pycache__/decorators.cpython-310.pyc
