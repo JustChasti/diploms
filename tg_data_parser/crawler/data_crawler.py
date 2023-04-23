@@ -1,11 +1,10 @@
 from telethon.tl.functions.messages import GetHistoryRequest
 from telethon.tl.types import PeerChannel
-from crawler.client import client
 from source.decorators import default_decorator
 
 
 @default_decorator(errormessage='Cant crawl data from channel')
-def crawl_channel(channel_link: str) -> list:
+def crawl_channel(client, channel_link: str) -> list:
     # собирет последние 10 постов из канала
     if 'https://t.me/' in channel_link:
         channel_link = channel_link.replace('https://t.me/', '')

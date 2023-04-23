@@ -14,4 +14,5 @@ channels = (
 )
 
 # delay 4 crawler
-get_info__delay = 60 # in minutes
+my_host = '127.0.0.1'
+get_info_delay = 60  # in minutes

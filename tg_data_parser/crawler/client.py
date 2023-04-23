@@ -1,6 +1,6 @@
 from time import sleep
 from loguru import logger
-from telethon import TelegramClient, events, sync
+from telethon.sync import TelegramClient, events
 from config import api_hash, api_id
 
 
