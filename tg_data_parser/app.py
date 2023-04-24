@@ -10,10 +10,15 @@ from config import api_hash, api_id
 
 from config import channels, my_host, get_info_delay
 from crawler.data_crawler import crawl_channel
+from views.articles import article_router
+from views.channels import channels_router
 
 
 logger.add("data.log", rotation="100 MB", enqueue=True)
 app = FastAPI()
+
+app.include_router(article_router)
+app.include_router(channels_router)
 
 
 def daemon():
@@ -29,7 +34,7 @@ def daemon():
         client.start()
     for i in channels:
         data = crawl_channel(client, i)
-        print(data)
+        # print(data)
     sleep(get_info_delay * 60)
 
 
