@@ -10,33 +10,35 @@ services:
     volumes:
       - /opt/db/mongodb:/data/base
 
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    container_name: rabbitmq
-    ports:
-        - 5672:5672
-        - 15672:15672
-
-  chrome1:
-    image: selenium/standalone-chrome:latest
-    hostname: chrome1
-    privileged: true
-    shm_size: 2g
-
-  chrome2:
-    image: selenium/standalone-chrome:latest
-    hostname: chrome2
-    privileged: true
-    shm_size: 2g
-
-  balancer:
+  parser:
     build:
       context: .
-      dockerfile: balancer/Dockerfile
-    image: balancer
-    container_name: balancer
+      dockerfile: tg_data_parser/Dockerfile
+    image: parser
+    container_name: parser
     restart: always
     tty: True
-    working_dir: /balancer
+    working_dir: /tg_data_parser
     ports:
       - 8000:8000
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.5.0
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - /opt/db/elasticsearch:/data/base
+    ports:
+      - 9200:9200
+      - 9300:9300

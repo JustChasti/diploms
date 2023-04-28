@@ -8,10 +8,12 @@ from loguru import logger
 from telethon.sync import TelegramClient, events
 from config import api_hash, api_id
 
-from config import channels, my_host, get_info_delay
+from config import my_host, get_info_delay
 from crawler.data_crawler import crawl_channel
 from views.articles import article_router
 from views.channels import channels_router
+from source.mongo import channels_list, add_example_channels
+from source.elastic import add_article
 
 
 logger.add("data.log", rotation="100 MB", enqueue=True)
@@ -32,9 +34,12 @@ def daemon():
         client.connect()
     except Exception as e:
         client.start()
+    add_example_channels()
+    channels = channels_list.find({})
     for i in channels:
-        data = crawl_channel(client, i)
-        # print(data)
+        data = crawl_channel(client, i['link'])
+        add_article(channel_id=i['_id'], article_text=data[0])
+        break
     sleep(get_info_delay * 60)
 
 
