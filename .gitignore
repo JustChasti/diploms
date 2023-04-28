@@ -19,3 +19,11 @@ tg_data_parser/.env
 .gitignore
 tg_data_parser/views/__pycache__/channels.cpython-310.pyc
 tg_data_parser/views/__pycache__/articles.cpython-310.pyc
+tg_data_parser/__pycache__/config.cpython-311.pyc
+.gitignore
+tg_data_parser/crawler/__pycache__/data_crawler.cpython-311.pyc
+tg_data_parser/source/__pycache__/decorators.cpython-311.pyc
+tg_data_parser/source/__pycache__/mongo.cpython-311.pyc
+tg_data_parser/source/__pycache__/elastic.cpython-311.pyc
+tg_data_parser/views/__pycache__/articles.cpython-311.pyc
+tg_data_parser/views/__pycache__/channels.cpython-311.pyc

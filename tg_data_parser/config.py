@@ -5,6 +5,7 @@ load_dotenv()
 
 api_id = os.getenv('TG_ID')
 api_hash = os.getenv('TG_HASH')
+phone = os.getenv('TG_PHONE')
 
 # mongodb
 base_host = 'mongo'
@@ -12,6 +13,7 @@ base_port = 27017
 client_name = 'data_parser'
 
 # elasticsearch
+# elastic исключен из проекта в связи с тем что жрет ресурсов он много а особо функций важных не несет а те что несет можно заменить nlp
 
 keywords_count = 3
 elastic_index = 'articles'
@@ -19,9 +21,9 @@ elastic_host = 'http://elasticsearch:9200'
 
 # telegram channels /betta
 channels = (
-    'https://t.me/habr_com',
+    'https://t.me/exploitex',
     'https://t.me/d_code',
-    'https://t.me/exploitex'
+    'https://t.me/habr_com'
 )
 
 # delay 4 crawler

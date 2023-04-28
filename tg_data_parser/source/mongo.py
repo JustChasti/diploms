@@ -1,3 +1,4 @@
+from time import sleep
 from pymongo import MongoClient
 from loguru import logger
 from config import base_host, base_port, client_name, channels
@@ -26,3 +27,7 @@ def add_example_channels():
             }},
             upsert=True
         )
+
+
+def add_article(channel_id, article_text) -> bool:
+    pass
