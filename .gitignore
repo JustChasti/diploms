@@ -27,3 +27,6 @@ tg_data_parser/source/__pycache__/mongo.cpython-311.pyc
 tg_data_parser/source/__pycache__/elastic.cpython-311.pyc
 tg_data_parser/views/__pycache__/articles.cpython-311.pyc
 tg_data_parser/views/__pycache__/channels.cpython-311.pyc
+tg_data_parser/aiotest.py
+tg_data_parser/session1.session
+tg_data_parser/session1.session-journal

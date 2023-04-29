@@ -15,9 +15,9 @@ client_name = 'data_parser'
 # elasticsearch
 # elastic исключен из проекта в связи с тем что жрет ресурсов он много а особо функций важных не несет а те что несет можно заменить nlp
 
+# nlp options
 keywords_count = 3
-elastic_index = 'articles'
-elastic_host = 'http://elasticsearch:9200'
+
 
 # telegram channels /betta
 channels = (
