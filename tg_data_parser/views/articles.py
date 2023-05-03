@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from source.mongo import get_all_articles
 
 
 article_router = APIRouter()
@@ -15,6 +16,7 @@ async def find_article_category(category):  # получение статей п
     return {'info': 'data'}
 
 
-@article_router.get('/article/{name}', response_class=JSONResponse)
-async def find_article_name(name):  # поиск статей по теме (как в поисковике)
-    return {'info': 'data'}
+@article_router.get('/articles', response_class=FileResponse)
+async def get_articles():  # получение всех статей из базы
+    filename = get_all_articles()
+    return FileResponse(path=filename, filename=filename)

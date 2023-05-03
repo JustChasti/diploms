@@ -29,21 +29,19 @@ def daemon():
     except RuntimeError as e:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-    client = TelegramClient('session1', api_id, api_hash)
+    client = TelegramClient('session3', api_id, api_hash)
     print(0)
     try:
         client.connect()
         client.start(phone=phone)
     except Exception as e:
         logger.exception('Cant connect to tg')
-    print(1)
     while True:
         add_example_channels()
         channels = channels_list.find({})
         for i in channels:
             data = crawl_channel(client, i['link'])
-            print(i)
-            ac.run(add_articles(channel_id=i['_id'], article_text=data))
+            ac.run(add_articles(channel_id=i['_id'], articles=data))
             break
         sleep(get_info_delay * 60)
 
@@ -53,6 +51,9 @@ async def main():
     daemon_thread = Thread(target=daemon)
     daemon_thread.start()
 
+# sudo docker run -d -p 27017:27017 --name tgparsermongo mongo:4.4.18
 
 if __name__ == "__main__":
-    uvicorn.run(app, host=my_host, port=8000)
+    from source.nlp import get_similar
+    get_similar('кошка', 'кошка')
+    # uvicorn.run(app, host=my_host, port=8000)

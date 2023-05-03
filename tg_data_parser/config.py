@@ -8,7 +8,7 @@ api_hash = os.getenv('TG_HASH')
 phone = os.getenv('TG_PHONE')
 
 # mongodb
-base_host = 'mongo'
+base_host = '0.0.0.0'
 base_port = 27017
 client_name = 'data_parser'
 
@@ -27,5 +27,5 @@ channels = (
 )
 
 # delay 4 crawler
-my_host = '0.0.0.0'
+my_host = '127.0.0.1'
 get_info_delay = 60  # in minutes
