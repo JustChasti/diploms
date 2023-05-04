@@ -30,7 +30,7 @@ def daemon():
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
     client = TelegramClient('session3', api_id, api_hash)
-    print(0)
+    print('daemon started')
     try:
         client.connect()
         client.start(phone=phone)
@@ -42,7 +42,8 @@ def daemon():
         for i in channels:
             data = crawl_channel(client, i['link'])
             ac.run(add_articles(channel_id=i['_id'], articles=data))
-            break
+            logger.info(f"channel: {i['link']} last 10 posts analized")
+            # break сокращение каналов при тестировании
         sleep(get_info_delay * 60)
 
 
@@ -54,6 +55,4 @@ async def main():
 # sudo docker run -d -p 27017:27017 --name tgparsermongo mongo:4.4.18
 
 if __name__ == "__main__":
-    from source.nlp import get_similar
-    get_similar('кошка', 'кошка')
-    # uvicorn.run(app, host=my_host, port=8000)
+    uvicorn.run(app, host=my_host, port=8000)

@@ -16,10 +16,10 @@ async def get_keywords(channel: Chan, text):
     channel.put(keyphrases)
 
 
-def get_similar(word1, word2):
+async def get_similar(channel: Chan, word1, word2):
     # ставлю порог сходства 0.4 если сходство больше то попадает в категорию
     nlp = spacy.load('ru_core_news_sm')
     words = f"{word1} {word2}"
     tokens = nlp(words)
     token1, token2 = tokens[0], tokens[1]
-    print("Similarity:", token1.similarity(token2))
+    channel.put(token1.similarity(token2))

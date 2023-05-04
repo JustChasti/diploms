@@ -6,6 +6,8 @@ from loguru import logger
 import aiochan as ac
 from config import base_host, base_port, client_name, channels
 from source.nlp import get_keywords
+from source.nlp import get_similar
+from source.decorators import default_decorator, categoizing_decorator, file_decorator
 
 
 while True:
@@ -22,6 +24,7 @@ while True:
         sleep(5)
 
 
+@default_decorator(errormessage='error in adding channels')
 def add_example_channels():
     for i in channels:
         channels_list.update_one(
@@ -35,6 +38,7 @@ def add_example_channels():
         )
 
 
+@default_decorator(errormessage='error in adding article to base')
 def add_new_article(channel_id, text):
     result = articles_list.insert_one(document={
             'channel_id': channel_id,
@@ -44,6 +48,7 @@ def add_new_article(channel_id, text):
     return result.inserted_id
 
 
+@file_decorator
 def get_all_articles():
     with ZipFile('dump.zip', 'w') as myzip:
         articles = articles_list.find({})
@@ -54,10 +59,104 @@ def get_all_articles():
                 file.write(',')
             file.write(']')
         myzip.write(f"articles.json")
-
     return 'dump.zip'
 
 
+@file_decorator
+def get_all_cats():
+    with ZipFile('dump.zip', 'w') as myzip:
+        categories = category_list.find({})
+        with open(f'cats.json', 'w', encoding="utf-8") as file:
+            file.write('[')
+            for document in categories:
+                file.write(dumps(document, ensure_ascii=False))
+                file.write(',')
+            file.write(']')
+        myzip.write(f"cats.json")
+    return 'dump.zip'
+
+
+@default_decorator(errormessage='error in geting cats and keys')
+def get_category_keyword(key_word, keys):
+    name = key_word[0]
+    for i in keys:
+        if name == i['name']:
+            return {'name': name, 'count': i['count']+1}
+    return {'name': name, 'count': 1}
+
+
+@categoizing_decorator
+async def categorize_article(article, key_words: list, categories):
+    existing = False
+    max_similar = []
+    article_categories = []
+    channel_0 = ac.Chan()
+    channel_1 = ac.Chan()
+    channel_2 = ac.Chan()
+    for i in categories:
+        ac.go(
+            get_similar(
+                channel=channel_0,
+                word1=key_words[0][1],
+                word2=i['name']
+            )
+        )
+        # ac.go(
+        #     get_similar(
+        #         channel=channel_1,
+        #         word1=key_words[1][1],
+        #         word2=i['name']
+        #     )
+        # )
+        # ac.go(
+        #     get_similar(
+        #         channel=channel_2,
+        #         word1=key_words[2][1],
+        #         word2=i['name']
+        #     )
+        # )
+        sim_0 = await channel_0.get()
+        # sim_1 = await channel_1.get()
+        # sim_2 = await channel_2.get()
+        # similar_key = max(sim_0, sim_1, sim_2)
+        # поставил так для мокращения времени
+        # при полном запуске - раскомментить строки выше
+        similar_key = sim_0
+        if similar_key >= 0.4:
+            article_categories.append({'category_id': i['_id'], 'percent': similar_key*100})
+            existing = True
+            max_similar.append({
+                'category': i,
+                'article_id': article,
+                'key_words': key_words
+            })
+    if existing:
+        keys_upd = []
+        for i in max_similar:
+            for j in i['key_words']:
+                keys_upd.append(get_category_keyword(j, i['category']['keys']))
+            new_key_names = []
+            for new_key in keys_upd:
+                new_key_names.append(new_key['name'])
+            for j in i['category']['keys']:
+                if j['name'] not in new_key_names:
+                    keys_upd.append(j)
+            category_list.update_one(
+                filter={'_id': i['category']['_id']},
+                update={"$set": {
+                    'keys': keys_upd
+                }}
+            )
+    else:
+        keys_upd = []
+        for i in key_words:
+            keys_upd.append({'name': i[0], 'count': 1})
+        cat_id = category_list.insert_one({'name': key_words[0][0], 'keys': keys_upd})
+        article_categories.append({'category_id': cat_id.inserted_id, 'percent': key_words[0][1]*100})
+    return article_categories
+
+
+@default_decorator(errormessage='error in adding articles or getting cats')
 async def add_articles(channel_id, articles):
     # keyword example: [('полезная табличка', 0.33), ('chatgpt', 0.21), ()]
     for i in articles:
@@ -82,6 +181,24 @@ async def add_articles(channel_id, articles):
                 }},
                 upsert=True
             )
-            existing = False
-            for category in category_list:
-                result = 0
+            if len(key_words) < 3:
+                pass
+            else:
+                articler_categories = await categorize_article(article, key_words, categories)
+                if articler_categories:
+                    articles_list.update_one(
+                        filter={
+                            '_id': article
+                        },
+                        update={"$set": {
+                            'categories': articler_categories
+                        }},
+                        upsert=True
+                    )
+                else:
+                    pass
+
+
+@default_decorator(errormessage='error in finding articles by category')
+def find_articles_bycat(category):
+    articles_list.find({})
