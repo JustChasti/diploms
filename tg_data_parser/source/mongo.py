@@ -146,7 +146,7 @@ async def categorize_article(article, key_words: list, categories):
         # поставил так для мокращения времени
         # при полном запуске - раскомментить строки выше
         # similar_key = sim_0
-        if similar_key >= 0.1:
+        if similar_key >= 0.05:
             article_categories.append({'category_id': i['_id'], 'percent': similar_key*100})
             existing = True
             max_similar.append({
@@ -233,6 +233,7 @@ def find_articles_bycat(category):
                 example = category_list.find_one({'_id': cat['category_id']})
                 if example['name'] == category:
                     response.append((i['text'], cat['percent']))
+                    break
         except Exception as e:
             logger.warning(i['_id'])
     if len(response) > 0:
