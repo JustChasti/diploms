@@ -38,6 +38,30 @@ def add_example_channels():
         )
 
 
+@default_decorator(errormessage='error in adding channels')
+def add_new_channel(link):
+    channels_list.update_one(
+        filter={
+            'link': link
+        },
+        update={"$set": {
+            'link': link
+        }},
+        upsert=True
+    )
+    return {'info': f'channel {link} added to base'}
+
+
+@default_decorator(errormessage='error in deleting channels')
+def remove_channel(link):
+    channels_list.delete_one(
+        filter={
+            'link': link
+        }
+    )
+    return {'info': f'channel {link} deleted from base'}
+
+
 @default_decorator(errormessage='error in adding article to base')
 def add_new_article(channel_id, text):
     result = articles_list.insert_one(document={
@@ -97,32 +121,32 @@ async def categorize_article(article, key_words: list, categories):
         ac.go(
             get_similar(
                 channel=channel_0,
-                word1=key_words[0][1],
+                word1=key_words[0][0],
                 word2=i['name']
             )
         )
-        # ac.go(
-        #     get_similar(
-        #         channel=channel_1,
-        #         word1=key_words[1][1],
-        #         word2=i['name']
-        #     )
-        # )
-        # ac.go(
-        #     get_similar(
-        #         channel=channel_2,
-        #         word1=key_words[2][1],
-        #         word2=i['name']
-        #     )
-        # )
-        sim_0 = await channel_0.get()
-        # sim_1 = await channel_1.get()
-        # sim_2 = await channel_2.get()
-        # similar_key = max(sim_0, sim_1, sim_2)
+        ac.go(
+            get_similar(
+                channel=channel_1,
+                word1=key_words[1][0],
+                word2=i['name']
+            )
+        )
+        ac.go(
+            get_similar(
+                channel=channel_2,
+                word1=key_words[2][0],
+                word2=i['name']
+            )
+        )
+        sim_0 = await channel_0.get() * key_words[0][1]
+        sim_1 = await channel_1.get() * key_words[1][1]
+        sim_2 = await channel_2.get() * key_words[2][1]
+        similar_key = max(sim_0, sim_1, sim_2)
         # поставил так для мокращения времени
         # при полном запуске - раскомментить строки выше
-        similar_key = sim_0
-        if similar_key >= 0.4:
+        # similar_key = sim_0
+        if similar_key >= 0.1:
             article_categories.append({'category_id': i['_id'], 'percent': similar_key*100})
             existing = True
             max_similar.append({
@@ -201,4 +225,23 @@ async def add_articles(channel_id, articles):
 
 @default_decorator(errormessage='error in finding articles by category')
 def find_articles_bycat(category):
-    articles_list.find({})
+    response = []
+    articles = articles_list.find({})
+    for i in articles:
+        try:
+            for cat in i['categories']:
+                example = category_list.find_one({'_id': cat['category_id']})
+                if example['name'] == category:
+                    response.append((i['text'], cat['percent']))
+        except Exception as e:
+            logger.warning(i['_id'])
+    if len(response) > 0:
+        return {
+            'info': 'category finded',
+            'data': sorted(response, key=lambda element: element[1], reverse=True)
+        }
+    else:
+        return {
+            'info': 'cant find that category',
+            'data': []
+        }

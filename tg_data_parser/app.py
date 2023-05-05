@@ -40,10 +40,12 @@ def daemon():
         add_example_channels()
         channels = channels_list.find({})
         for i in channels:
-            data = crawl_channel(client, i['link'])
-            ac.run(add_articles(channel_id=i['_id'], articles=data))
-            logger.info(f"channel: {i['link']} last 10 posts analized")
-            # break сокращение каналов при тестировании
+            try:
+                data = crawl_channel(client, i['link'])
+                ac.run(add_articles(channel_id=i['_id'], articles=data))
+                logger.info(f"channel: {i['link']} last 10 posts analized")
+            except Exception as e:
+                logger.warning(e)
         sleep(get_info_delay * 60)
 
 

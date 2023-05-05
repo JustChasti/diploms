@@ -5,6 +5,7 @@ from config import keywords_count
 
 
 async def get_keywords(channel: Chan, text):
+    nlp = spacy.load('ru_core_news_sm')
     extractor = pke.unsupervised.TopicRank()
     extractor.load_document(
         input=text,
@@ -13,7 +14,17 @@ async def get_keywords(channel: Chan, text):
     extractor.candidate_selection()
     extractor.candidate_weighting()
     keyphrases = extractor.get_n_best(n=keywords_count)
-    channel.put(keyphrases)
+    output = []
+    for i in keyphrases:
+        phrase = nlp(i[0])
+        keyphrase = ''
+        for token in phrase:
+            if len(keyphrase) > 0:
+                keyphrase += f' {token.lemma_}'
+            else:
+                keyphrase += token.lemma_
+        output.append((keyphrase, i[1]))
+    channel.put(output)
 
 
 async def get_similar(channel: Chan, word1, word2):

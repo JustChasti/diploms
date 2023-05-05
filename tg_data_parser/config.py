@@ -21,9 +21,7 @@ keywords_count = 3
 
 # telegram channels /betta
 channels = (
-    'https://t.me/exploitex',
-    'https://t.me/d_code',
-    'https://t.me/habr_com'
+    'https://t.me/habr_com',
 )
 
 # delay 4 crawler
