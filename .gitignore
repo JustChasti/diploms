@@ -38,3 +38,8 @@ tg_data_parser/cats.json
 .gitignore
 tg_data_parser/articles.json
 tg_data_parser/dump.zip
+auto_proxy/.env
+auto_proxy/data.log
+auto_proxy/__pycache__/config.cpython-310.pyc
+auto_proxy/proxy_checker/__pycache__/chek.cpython-310.pyc
+auto_proxy/proxy_checker/__pycache__/check.cpython-310.pyc
