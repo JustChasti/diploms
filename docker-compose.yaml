@@ -10,14 +10,33 @@ services:
     volumes:
       - /opt/db/mongodb:/data/base
 
-  parser:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672
+
+  chrome1:
+    image: selenium/standalone-chrome:latest
+    hostname: chrome1
+    privileged: true
+    shm_size: 2g
+
+  chrome2:
+    image: selenium/standalone-chrome:latest
+    hostname: chrome2
+    privileged: true
+    shm_size: 2g
+
+  balancer:
     build:
       context: .
-      dockerfile: tg_data_parser/Dockerfile
-    image: parser
-    container_name: parser
+      dockerfile: balancer/Dockerfile
+    image: balancer
+    container_name: balancer
     restart: always
     tty: True
-    working_dir: /tg_data_parser
+    working_dir: /balancer
     ports:
       - 8000:8000
