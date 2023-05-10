@@ -2,10 +2,10 @@ import bcrypt
 from pydantic import BaseModel, validator
 from db.db import users
 from modules.decorators import default_decorator
+from config import encrypt_salt
 
 
 class UserModel(BaseModel):
-    email: str
     username: str
     password: str
 
@@ -23,7 +23,7 @@ class UserModel(BaseModel):
     def get_id(self):
         self.password = bcrypt.hashpw(
             self.password.encode('utf-8'),
-            encrytp_salt
+            encrypt_salt
         ).decode('utf-8')
         user = users.find_one({
             'username': self.username,
@@ -41,7 +41,7 @@ class UserModel(BaseModel):
         else:
             self.password = bcrypt.hashpw(
                 self.password.encode('utf-8'),
-                encrytp_salt
+                encrypt_salt
             ).decode('utf-8')
             user = users.insert_one(
                 self.__dict__

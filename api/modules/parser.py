@@ -11,8 +11,6 @@ from config import page_dir
 
 @default_decorator('error in getting html')
 async def get_html(host, task):
-    # Task scheme
-    # task_id, url, type, element
     StateMachine.set_state(host['hostname'], False)
     started_at = datetime.now()
     try:

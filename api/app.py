@@ -10,6 +10,7 @@ import aiochan as ac
 
 from views.browser import browser_router
 from views.main import main_router
+from views.proxies import proxy_router
 from config import my_host, rabbit_host, queue_tasks_name
 from db.db import create_host_list, set_default_proxies
 from modules.parser import get_html
@@ -21,6 +22,7 @@ logger.add("data.log", rotation="100 MB", enqueue=True)
 app = FastAPI()
 app.include_router(browser_router)
 app.include_router(main_router)
+app.include_router(proxy_router)
 
 
 def assign_task(ch, method, properties, body):

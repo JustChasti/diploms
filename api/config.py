@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# test-acc gray, qwerty, 645b8f50b2f1111db4e60947
+
 admin_password = 'Qwerty21'
 my_host = '0.0.0.0'
 base_host = 'mongo'

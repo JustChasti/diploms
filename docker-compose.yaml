@@ -17,18 +17,6 @@ services:
         - 5672:5672
         - 15672:15672
 
-  chrome1:
-    image: selenium/standalone-chrome:latest
-    hostname: chrome1
-    privileged: true
-    shm_size: 2g
-
-  chrome2:
-    image: selenium/standalone-chrome:latest
-    hostname: chrome2
-    privileged: true
-    shm_size: 2g
-
   api:
     build:
       context: .
