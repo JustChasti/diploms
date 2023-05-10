@@ -1,3 +1,4 @@
+import bcrypt
 from pydantic import BaseModel, validator
 from db.db import users
 from modules.decorators import default_decorator
@@ -20,6 +21,10 @@ class UserModel(BaseModel):
 
     @default_decorator('Error in find user')
     def get_id(self):
+        self.password = bcrypt.hashpw(
+            self.password.encode('utf-8'),
+            encrytp_salt
+        ).decode('utf-8')
         user = users.find_one({
             'username': self.username,
             'password': self.password
@@ -34,7 +39,11 @@ class UserModel(BaseModel):
         if self.find_user():
             return False
         else:
+            self.password = bcrypt.hashpw(
+                self.password.encode('utf-8'),
+                encrytp_salt
+            ).decode('utf-8')
             user = users.insert_one(
-                self.__dict__  # добавить хранение паролей хэшированное
+                self.__dict__
             )
             return user.inserted_id

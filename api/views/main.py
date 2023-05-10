@@ -32,4 +32,7 @@ async def add_user(user: UserModel, a_password: str):
 async def get_user(username: str, password: str):
     user = UserModel(email='', username=username, password=password)
     id = user.get_id()
-    return {'id': str(id)}
+    if id:
+        return {'id': str(id)}
+    else:
+        return {'id': 0}

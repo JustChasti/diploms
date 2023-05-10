@@ -29,14 +29,14 @@ services:
     privileged: true
     shm_size: 2g
 
-  balancer:
+  api:
     build:
       context: .
-      dockerfile: balancer/Dockerfile
-    image: balancer
-    container_name: balancer
+      dockerfile: api/Dockerfile
+    image: api
+    container_name: api
     restart: always
     tty: True
-    working_dir: /balancer
+    working_dir: /api
     ports:
       - 8000:8000

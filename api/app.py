@@ -11,7 +11,7 @@ import aiochan as ac
 from views.browser import browser_router
 from views.main import main_router
 from config import my_host, rabbit_host, queue_tasks_name
-from db.db import create_host_list
+from db.db import create_host_list, set_default_proxies
 from modules.parser import get_html
 from db.state_machine import StateMachine
 
@@ -57,6 +57,7 @@ def starter():
 @app.on_event("startup")
 async def main():
     create_host_list()
+    set_default_proxies()
     rabbit = Thread(target=starter)
     rabbit.start()
 

@@ -10,6 +10,7 @@ base_port = 27017
 client_name = 'balancer'
 login = os.getenv('LOGIN')
 password = os.getenv('PASSWORD')
+encrypt_salt = b'$2b$08$yINtjjwcwMuOCM6/tHITRO'
 
 proxy_list = {
     '185.231.244.160',

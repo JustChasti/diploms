@@ -18,6 +18,7 @@ from config import rabbit_host, queue_tasks_name, page_dir
 class TaskModel(BaseModel):
     user_id: str
     url: str
+    password: str
     created_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
     parse_time: Optional[datetime] = None
@@ -38,7 +39,11 @@ class TaskModel(BaseModel):
     @default_decorator('find user error')
     def chek_task_user(self):
         user = users.find_one({
-            '_id': ObjectId(self.user_id)
+            '_id': ObjectId(self.user_id),
+            'password': bcrypt.hashpw(
+                self.password.encode('utf-8'),
+                encrytp_salt
+            ).decode('utf-8')
         })
         if user:
             return True
@@ -95,7 +100,7 @@ class TaskModel(BaseModel):
         self.completed_at = datetime.now() + timedelta(days=7)
         if not self.chek_task_user():
             return {
-                'message': 'No users with this id'
+                'message': 'No users with this id and password'
             }
         id = self.add_to_base()
         if id:
