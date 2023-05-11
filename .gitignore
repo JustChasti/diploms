@@ -46,3 +46,5 @@ auto_proxy/proxy_checker/__pycache__/check.cpython-310.pyc
 api/venv
 psistem(closed)
 api/.env
+web_client/venv
+web_client/.env

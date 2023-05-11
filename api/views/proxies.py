@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from models.user import UserModel
 from config import admin_password
 from db.db import get_available_proxy, ban_user_proxy
+from modules.proxy_checker import add_new_proxy
 
 
 proxy_router = APIRouter()
@@ -24,3 +25,11 @@ async def expire_proxy(user: UserModel, address):
         return ban_user_proxy(user_id, address)
     else:
         return {'info': 'No user with that login and password'}
+
+
+@proxy_router.post('/add_proxy', response_class=JSONResponse)
+async def add_proxy(admin_pass, address, port):
+    if admin_pass == admin_password:
+        return add_new_proxy(address, port)
+    else:
+        return {'info': 'password incorrect'}

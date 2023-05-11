@@ -3,7 +3,7 @@ from time import sleep
 from pymongo import MongoClient, ASCENDING
 from loguru import logger
 from config import base_host, base_port, client_name, selenium_hosts
-from config import proxy_list, login, password
+from config import proxy_list, login, password, http_port
 from db.state_machine import StateMachine
 from modules.decorators import default_decorator
 
@@ -29,6 +29,7 @@ def set_default_proxies():
             filter={'address': i},
             update={"$set": {
                 'address': i,
+                'port': http_port,
                 'in_use': False,
                 'login': login,
                 'password': password,
@@ -66,14 +67,16 @@ def get_available_proxy(user_id):
     if unused:
         for i in unused:
             if user_id not in i['ban_list']:
+                proxies.update_one({'_id': i['_id']}, {'$set':{'in_use': True}})
                 return {'address': i['address'], 'login': i['login'], 'password': password}
     used = proxies.find(filter={
         'in_use': True,
         'active': True,
     }).sort('last_used', ASCENDING)
     if used:
-        for i in unused:
+        for i in used:
             if user_id not in i['ban_list']:
+                proxies.update_one({'_id': i['_id']}, {'$set':{'last_used': datetime.now()}})
                 return {'address': i['address'], 'login': i['login'], 'password': password}
     return {'address': '', 'login': '', 'password': ''}
 

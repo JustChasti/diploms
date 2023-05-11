@@ -15,6 +15,7 @@ from config import my_host, rabbit_host, queue_tasks_name
 from db.db import create_host_list, set_default_proxies
 from modules.parser import get_html
 from db.state_machine import StateMachine
+from modules.proxy_checker import proxy_daemon
 
 
 logger.add("data.log", rotation="100 MB", enqueue=True)
@@ -62,6 +63,8 @@ async def main():
     set_default_proxies()
     rabbit = Thread(target=starter)
     rabbit.start()
+    proxy_worker = Thread(target=proxy_daemon)
+    proxy_worker.start()
 
 
 if __name__ == "__main__":
