@@ -3,3 +3,4 @@ python-dotenv
 loguru
 uvicorn
 requests
+jinja2

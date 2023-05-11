@@ -48,3 +48,6 @@ psistem(closed)
 api/.env
 web_client/venv
 web_client/.env
+web_client/data.log
+web_client/__pycache__/config.cpython-310.pyc
+web_client/views/__pycache__/main.cpython-310.pyc
