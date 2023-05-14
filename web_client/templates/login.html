@@ -1,0 +1,50 @@
+<html>
+<head>
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='/bootstrap.min.css') }}" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="{{ url_for('static', path='/bootstrap.bundle.min.js') }}" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <title>PGS Web-Client</title>
+</head>
+<body>
+    <div class="container">
+      <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div class="col-md-3 mb-2 mb-md-0">
+          <a href="{{home}} class="d-inline-flex link-body-emphasis text-decoration-none">
+            <img class="bi" width="60" height="48" src="{{ url_for('static', path='/logo.svg') }}"></img>
+          </a>
+        </div>
+  
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="{{home}}" class="nav-link px-2 link-secondary">Home</a></li>
+          <li><a href="{{api}}" class="nav-link text-info px-2">API</a></li>
+          <li><a href="{{pricing}}" class="nav-link text-info px-2">Pricing</a></li>
+          <li><a href="{{about}}" class="nav-link text-info px-2">About</a></li>
+        </ul>
+  
+        <div class="col-md-3 text-end">
+          <button type="button" class="btn btn-outline-info me-2"><a href="{{login}}" class="nav-link text-info px-1">Login</a></button>
+          <button type="button" class="btn btn-outline-info me-2"><a href="{{signup}}" class="nav-link text-info px-1">Sign-up</a></button>
+        </div>
+      </header>
+    </div>
+    <div class="container mb-4">
+      <br>
+    </div>
+    <div class="container w-50">
+      <main class="form-signin w-100 m-auto">
+        <form method="post">
+          <h1 class="h3 mb-4 fw-normal">Выполните вход</h1>
+          <div class="form-floating">
+            <input type="email" class="form-control" id="floatingInput" name="login">
+            <label for="floatingInput">Почта</label>
+          </div>
+          <div class="form-floating mb-4">
+            <input type="password" class="form-control" id="floatingPassword" name="password">
+            <label for="floatingPassword">Пароль</label>
+          </div>
+          <button class="w-100 btn btn-lg btn-outline-info" type="submit">Sign in</button>
+        </form>
+      </main>
+    </div>
+</body>
+</html>
