@@ -51,3 +51,5 @@ web_client/.env
 web_client/data.log
 web_client/__pycache__/config.cpython-310.pyc
 web_client/views/__pycache__/main.cpython-310.pyc
+web_client/static/bootstrap.bundle.min.js
+web_client/static/bootstrap.min.css
