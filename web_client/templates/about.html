@@ -1,0 +1,59 @@
+<html>
+<head>
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='/bootstrap.min.css') }}" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="{{ url_for('static', path='/bootstrap.bundle.min.js') }}" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <title>PGS Web-Client</title>
+</head>
+<body>
+    <div class="container">
+      <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div class="col-md-3 mb-2 mb-md-0">
+          <a href="{{home}} class="d-inline-flex link-body-emphasis text-decoration-none">
+            <img class="bi" width="60" height="48" src="{{ url_for('static', path='/logo.svg') }}"></img>
+          </a>
+        </div>
+  
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="{{home}}" class="nav-link px-2 text-info">Home</a></li>
+          <li><a href="{{api}}" class="nav-link text-info px-2">API</a></li>
+          <li><a href="{{about}}" class="nav-link text-info px-2 link-secondary">About</a></li>
+        </ul>
+  
+        <div class="col-md-3 text-end">
+          <button type="button" class="btn  btn-outline-info me-2"><a href="{{login}}" class="nav-link link-secondary px-1">Login</a></button>
+          <button type="button" class="btn btn-outline-info me-2"><a href="{{signup}}" class="nav-link link-secondary px-1">Sign-up</a></button>
+        </div>
+      </header>
+    </div>
+
+    <div class="container">
+          <article class="blog-post">
+            <h2 class="blog-post-title mb-1">О системе PGS</h2>
+            <p>Если вы это читаете, то вероятно на используемом вами сервере установлена система PGS</p>
+            <hr>
+            <p>Мы создаем передовые решения в области парсинга данных. Используя нашу систему вы можете значительно экономить ресурсы сервера и финансы. О том как правильно использовать все функции PGS вы можете прочесть на <a href="{{api}}">Этой</a> странице веб клиента</p>
+            <h3>Преимущества использования</h3>
+            <p>Мы предоставляем клиентам 2 основных сервиса для совместного использования</p>
+            <dl>
+                <dt>Виртуальный браузер</dt>
+                <dd>Зачастую при парсинге пользователю необходимо получить данные, которые генерируются с помощью JavaScript движка браузера. Но выделение ресурсов для отдельно работающего браузера под управлением Selenium не всегда рационально, если вам необходимо раз в определенное время обрабатывать данные с каких-либо веб страниц. Наш виртуальный браузер позволяет избежать простоя при использовании ваших ресурсов сервера благодаря некоторым принципам:</dd>
+                <dd>   
+                    <ul>
+                        <li>Совместное использование нескольких виртуальных браузеров</li>
+                        <li>Создание пользователеми задач и их обработка свободными виртуальными браузерами в порядке очереди</li>
+                        <li>Прогнозирование времени выполнения задачи пользователем исходя из текущей очереди</li>
+                    </ul>
+                </dd>
+                <dt>Пул приватных прокси-серверов</dt>
+                <dd>Зачастую пользователь может быть заблокирован сервисом из-за частых запросов к нему. Для решения этой проблемы PGS предлагает пул прокси-серверов. Использование наших прокси-серверов будет значительно выгоднее чем покупка своих собственных приватных прокси и вот почему:</dd>
+                <dd>
+                    <ul>
+                        <li>Каждый час-два наши прокси проверяются на загруженность</li>
+                        <li>Система выдачи нового прокси адреса разработана так, чтобы выдавать вам наименее загруженный на данный момент адрес</li>
+                        <li>При попадании определенного прокси адреса в блокировку вашего сервиса он продолжит использоваться другими пользователями для сбора данных с других сервисов. В то время как у вас будет возможность внести его в свой личный черный список. В таком случае его выдача вам прекратится</li>
+                    </ul>
+                </dd>
+              </dl>
+          </article>
+    </div>

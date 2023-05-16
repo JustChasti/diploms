@@ -1,0 +1,15 @@
+<html>
+<head>
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='/bootstrap.min.css') }}" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="{{ url_for('static', path='/bootstrap.bundle.min.js') }}" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <title>PGS Web-Client</title>
+</head>
+<body>
+    <main class="flex-shrink-0">
+        <div class="container">
+            <h1 class="mt-5">{{error_name}}</h1>
+            <p class="lead">{{error_text}}</p>
+        </div>
+    </main>
+</body>
