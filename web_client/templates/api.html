@@ -1,0 +1,91 @@
+<html>
+<head>
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='/bootstrap.min.css') }}" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="{{ url_for('static', path='/bootstrap.bundle.min.js') }}" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <title>PGS Web-Client</title>
+</head>
+<body>
+    <div class="container">
+      <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div class="col-md-3 mb-2 mb-md-0">
+          <a href="{{home}} class="d-inline-flex link-body-emphasis text-decoration-none">
+            <img class="bi" width="60" height="48" src="{{ url_for('static', path='/logo.svg') }}"></img>
+          </a>
+        </div>
+  
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="{{home}}" class="nav-link px-2 text-info">Home</a></li>
+          <li><a href="{{api}}" class="nav-link link-secondary px-2">API</a></li>
+          <li><a href="{{about}}" class="nav-link text-info px-2">About</a></li>
+        </ul>
+  
+        <div class="col-md-3 text-end">
+          <button type="button" class="btn  btn-outline-info me-2"><a href="{{login}}" class="nav-link link-secondary px-1">Login</a></button>
+          <button type="button" class="btn btn-outline-info me-2"><a href="{{signup}}" class="nav-link link-secondary px-1">Sign-up</a></button>
+        </div>
+      </header>
+    </div>
+    <div class="container">
+      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h3 class="my-0 fw-normal mt-4 mb-2">Ваши данные:</h3>
+            </div>
+            <div class="card-body">
+              <p class="card-title">Ваш id: {{user_id}}</p>
+              <p class="card-title">Ваш логин: {{user_login}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h3 class="my-0 fw-normal mt-4 mb-2">Задач в очереди:</h3>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title mt-2">{{tasks}}</h1>
+            </div>
+          </div>
+        </div> 
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h3 class="my-0 fw-normal">Прокси заблокированно:</h3>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title mt-2">{{proxies}}/{{proxies_max}}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+              <h3 class="mb-2">Доступ к api</h3>
+              <p class="card-text mb-auto">Для работы с нашем api, вам необходимо получить адрес сервера (далее api_host) у вашего хостинг провайдера. Подключение к api осуществляется по порту <strong>4002</strong>. Для развертывания вашего приложения на сервере, подключитесь к нему по SSH. Как это сделать вы можете узнать <a class="text-info" href="https://help.reg.ru/support/hosting/dostupy-i-podklyucheniye-panel-upravleniya-ftp-ssh/rabota-po-ssh-na-virtualnom-hostinge">здесь</a>. Данные для доступа к api после развертывания остаются те же. Запросы и ответы отправляются в формате JSON</p>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+              <img class="bd-placeholder-img" width="250" height="250" src="{{ url_for('static', path='/connect_img.png') }}"></img>
+            </div>
+          </div>
+          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+              <h3 class="mb-2">Создание задачи для виртуального браузера</h3>
+              <p class="card-text mb-auto">Если вам нужно создать задачу для виртуального браузера, необходимо отправить <strong>POST</strong> запрос по адресу: api_host:4002/add-task/ Передав в формате JSON следующие данные:</p>
+              <ul>
+                <li>user_id - Как его получить, читайте выше</li>
+                <li>acces_token - Как его получить, читайте выше</li>
+                <li>element_type - может быть одним из 3 типов: (CLASS_NAME, CSS_SELECTOR, XPATH). Это то по какому принципу браузер будет находить искомый элемент. В данном примере я буду искать элемент по названию класса, значит этот параметр примет значение CLASS_NAME</li>
+                <li>element - само название элемента (Например если мы ище элемент по имени класса: 'card-text'), то значение этого поля будет 'card-text'. Выбирать искомый элемент нужно грамотно, ведь при его появлении браузер останавливает загрузку страницы. Значит все остальные данные, которые вам нужно собрать должны прогрузиться раньше этого элемента</li>
+              </ul>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+              <img class="bd-placeholder-img" width="250" height="250" src="{{ url_for('static', path='/css_logo.png') }}"></img>
+            </div>
+          </div>
+    </div> 
+  </body>
+</html>
