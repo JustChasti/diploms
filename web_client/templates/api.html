@@ -27,34 +27,34 @@
       </header>
     </div>
     <div class="container">
-      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center d-flex">
         <div class="col">
-          <div class="card mb-4 rounded-3 shadow-sm">
-            <div class="card-header py-3">
-              <h3 class="my-0 fw-normal mt-4 mb-2">Ваши данные:</h3>
+          <div class="card mb-2 rounded-3 shadow-sm h-100">
+            <div class="card-header py-3 h-50">
+              <h3 class="my-0 fw-normal">Ваши данные:</h3>
             </div>
-            <div class="card-body">
+            <div class="card-body h-50">
               <p class="card-title">Ваш id: {{user_id}}</p>
               <p class="card-title">Ваш логин: {{user_login}}</p>
             </div>
           </div>
         </div>
         <div class="col">
-          <div class="card mb-4 rounded-3 shadow-sm">
-            <div class="card-header py-3">
-              <h3 class="my-0 fw-normal mt-4 mb-2">Задач в очереди:</h3>
+          <div class="card mb-2 rounded-3 shadow-sm h-100">
+            <div class="card-header py-3 h-50">
+              <h3 class="my-0 fw-normal">Задач в очереди:</h3>
             </div>
-            <div class="card-body">
+            <div class="card-body h-50">
               <h1 class="card-title mt-2">{{tasks}}</h1>
             </div>
           </div>
         </div> 
         <div class="col">
-          <div class="card mb-4 rounded-3 shadow-sm">
-            <div class="card-header py-3">
+          <div class="card mb-2 rounded-3 shadow-sm h-100">
+            <div class="card-header py-3 h-50">
               <h3 class="my-0 fw-normal">Прокси заблокированно:</h3>
             </div>
-            <div class="card-body">
+            <div class="card-body h-50">
               <h1 class="card-title mt-2">{{proxies}}/{{proxies_max}}</h1>
             </div>
           </div>

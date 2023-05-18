@@ -54,3 +54,6 @@ web_client/views/__pycache__/main.cpython-310.pyc
 web_client/static/bootstrap.bundle.min.js
 web_client/static/bootstrap.min.css
 web_client/forms/__pycache__/sign.cpython-310.pyc
+web_client/__pycache__/config.cpython-311.pyc
+web_client/forms/__pycache__/sign.cpython-311.pyc
+web_client/views/__pycache__/main.cpython-311.pyc
