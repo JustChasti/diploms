@@ -14,6 +14,11 @@ login = os.getenv('LOGIN')
 password = os.getenv('PASSWORD')
 encrypt_salt = b'$2b$08$yINtjjwcwMuOCM6/tHITRO'
 
+SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_DAYS = 1
+REFRESH_TOKEN_EXPIRE_DAYS = 30
+
 proxy_list = {
     '185.231.244.160',
     '185.231.244.178',

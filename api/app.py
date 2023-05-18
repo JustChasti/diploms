@@ -68,4 +68,8 @@ async def main():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host=my_host, port=8000)
+    # uvicorn.run(app, host=my_host, port=8000)
+    from models.user import Token
+    token = Token('12313434', 1, 'acces')
+    acces_token = token.generate_token()
+    print(acces_token)
