@@ -57,3 +57,17 @@ web_client/forms/__pycache__/sign.cpython-310.pyc
 web_client/__pycache__/config.cpython-311.pyc
 web_client/forms/__pycache__/sign.cpython-311.pyc
 web_client/views/__pycache__/main.cpython-311.pyc
+api/__pycache__/config.cpython-311.pyc
+api/db/__pycache__/db.cpython-311.pyc
+api/db/__pycache__/state_machine.cpython-311.pyc
+api/models/__pycache__/task.cpython-311.pyc
+api/models/__pycache__/user.cpython-311.pyc
+api/modules/__pycache__/decorators.cpython-311.pyc
+api/modules/__pycache__/extractor.cpython-311.pyc
+api/modules/__pycache__/proxy_checker.cpython-311.pyc
+api/modules/__pycache__/parser.cpython-311.pyc
+api/views/__pycache__/browser.cpython-311.pyc
+api/views/__pycache__/main.cpython-311.pyc
+api/views/__pycache__/proxies.cpython-311.pyc
+api/data.log
+api/models/__pycache__/token.cpython-311.pyc

@@ -27,16 +27,20 @@ def set_default_proxies():
     for i in proxy_list:
         proxies.update_one(
             filter={'address': i},
-            update={"$set": {
-                'address': i,
-                'port': http_port,
-                'in_use': False,
-                'login': login,
-                'password': password,
-                'last_used': datetime.now(),
-                'active': True,
-                'ban_list': []  # ['user_id_1',..., 'user_id_n']
-            }},
+            update={
+                '$setOnInsert': {
+                    'port': http_port,
+                    'address': i,
+                    'login': login,
+                    'password': password,
+                    'ban_list': []
+                },
+                "$set": {
+                    'in_use': False,
+                    'last_used': datetime.now(),
+                    'active': True,
+                }
+            },
             upsert=True
         )
 

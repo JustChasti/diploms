@@ -1,32 +1,10 @@
 import bcrypt
 from pydantic import BaseModel, validator
-import jwt
-from datetime import datetime, timedelta
-from db.db import users
+from bson import ObjectId
+from db.db import users, proxies, tasks
 from modules.decorators import default_decorator
-from config import encrypt_salt, ACCESS_TOKEN_EXPIRE_DAYS, REFRESH_TOKEN_EXPIRE_DAYS
-
-
-class Token():
-    user_id: str
-    days: int
-    token_type: str
-
-
-    def __init__(self, user_id, days, token_type):
-        self.user_id = user_id
-        self.days = days
-        self.token_type = token_type
-
-    @default_decorator('error in generating token')
-    def generate_token(self):
-        expire = datetime.now() + timedelta(days=self.days)
-        to_encode = {
-            'id': self.user_id,
-            'type': self.token_type,
-        }
-        encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-        return encoded_jwt
+from config import encrypt_salt
+from models.token import Token, generate_ac_token, decode_token, check_valid_token
 
 
 class UserModel(BaseModel):
@@ -70,13 +48,38 @@ class UserModel(BaseModel):
             user = users.insert_one(
                 self.__dict__
             )
-            return user.inserted_id
-
+            refresh_token = Token(user.inserted_id).generate_refr_token()
+            access_token = generate_ac_token(refresh_token)
+            return {'access_token': access_token, 'refresh_token': refresh_token}
+        
+    @default_decorator('error in login')
+    def login_user(self, user_id):
+        refresh_token = Token(user_id).generate_refr_token()
+        access_token = generate_ac_token(refresh_token)
+        return {'access_token': access_token, 'refresh_token': refresh_token}
     
-    @default_decorator('token creation error')
-    def create_r_token(self, type):
-        user = self.get_id()
+
+@default_decorator('Error in find user')
+def get_user_data(access_token):
+    data = decode_token(access_token)
+    if check_valid_token(data, 'access'):
+        user = users.find_one({
+            '_id': ObjectId(data['id'])
+        })
         if user:
-            pass
+            response = {
+                'id': data['id'],
+                'username': user['username']
+            }
+            response['count_max_proxies'] = proxies.count_documents({})
+            count_banned_proxies = 0
+            # for i in proxies.find({}):
+            #     if ObjectId(data['id']) in i['ban_list']:
+            #         count_banned_proxies += 1
+            # response['count_banned_proxies'] = count_banned_proxies
+            response['count_banned_proxies'] = proxies.count_documents({"ban_list": ObjectId(data['id'])})
+            return response
         else:
-            return {'refresh_token': 0}
+            return {'info': 'token invalid'}
+    else:
+        return {'info': 'token invalid'}

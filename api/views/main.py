@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from models.user import UserModel
+from models.user import UserModel, get_user_data
+from models.token import generate_ac_token
 from config import admin_password
 
 
@@ -9,30 +10,53 @@ main_router = APIRouter()
 
 @main_router.post('/add-user', response_class=JSONResponse)
 async def add_user(user: UserModel, a_password: str):
-    if a_password == admin_password:  # переделать проверку пароля
-        id = user.add_user()
-        if id:
+    if a_password == admin_password:
+        tokens = user.add_user()
+        if tokens:
             return {
                 'info': "This user has been added",
-                'user_id': str(id)
+                'tokens': tokens
             }
         else:
             return {
                 'info': "Adding user error",
-                'user_id': id
+                'tokens': tokens
             }
     else:
         return {
                 'info': "Adding user error, passwords didn't match",
-                'user_id': False
+                'tokens': False
             }
+    
 
-
-@main_router.get('/user_id/{username}/{password}', response_class=JSONResponse)
-async def get_user(username: str, password: str):
-    user = UserModel(email='', username=username, password=password)
-    id = user.get_id()
-    if id:
-        return {'id': str(id)}
+@main_router.post('/login', response_class=JSONResponse)
+async def login(user: UserModel):
+    user_id = user.get_id()
+    if user_id:
+        return user.login_user(user_id)
     else:
-        return {'id': 0}
+        return {
+            'info': "No user with that login and password"
+        }
+    
+
+@main_router.post('/login', response_class=JSONResponse)
+async def login(user: UserModel):
+    user_id = user.get_id()
+    if user_id:
+        return user.login_user(user_id)
+    else:
+        return {
+            'info': "No user with that login and password"
+        }
+    
+
+@main_router.get('/refresh', response_class=JSONResponse)
+async def login(refresh_token: str):
+    access_token = generate_ac_token(refresh_token)
+    return {'access_token': access_token}
+
+
+@main_router.get('/user_info/{access_token}', response_class=JSONResponse)
+async def get_user(access_token: str):
+    return get_user_data(access_token)

@@ -61,15 +61,11 @@ def starter():
 async def main():
     create_host_list()
     set_default_proxies()
-    rabbit = Thread(target=starter)
-    rabbit.start()
-    proxy_worker = Thread(target=proxy_daemon)
-    proxy_worker.start()
+    # rabbit = Thread(target=starter)
+    # rabbit.start()
+    # proxy_worker = Thread(target=proxy_daemon)
+    # proxy_worker.start()
 
 
 if __name__ == "__main__":
-    # uvicorn.run(app, host=my_host, port=8000)
-    from models.user import Token
-    token = Token('12313434', 1, 'acces')
-    acces_token = token.generate_token()
-    print(acces_token)
+    uvicorn.run(app, host=my_host, port=8000)
