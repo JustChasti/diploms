@@ -61,10 +61,10 @@ def starter():
 async def main():
     create_host_list()
     set_default_proxies()
-    # rabbit = Thread(target=starter)
-    # rabbit.start()
-    # proxy_worker = Thread(target=proxy_daemon)
-    # proxy_worker.start()
+    rabbit = Thread(target=starter)
+    rabbit.start()
+    proxy_worker = Thread(target=proxy_daemon)
+    proxy_worker.start()
 
 
 if __name__ == "__main__":

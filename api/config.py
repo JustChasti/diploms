@@ -6,7 +6,7 @@ load_dotenv()
 # test-acc gray, qwerty, 645b8f50b2f1111db4e60947
 
 admin_password = 'Qwerty21'
-my_host = '127.0.0.1'
+my_host = '0.0.0.0'
 base_host = 'localhost'
 base_port = 27017
 client_name = 'balancer'
