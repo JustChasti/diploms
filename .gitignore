@@ -71,3 +71,5 @@ api/views/__pycache__/main.cpython-311.pyc
 api/views/__pycache__/proxies.cpython-311.pyc
 api/data.log
 api/models/__pycache__/token.cpython-311.pyc
+web_client/source/__pycache__/decorators.cpython-311.pyc
+web_client/source/__pycache__/server_reqs.cpython-311.pyc

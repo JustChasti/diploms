@@ -71,12 +71,8 @@ def get_user_data(access_token):
                 'id': data['id'],
                 'username': user['username']
             }
+            response['count_tasks'] = tasks.count_documents({'complete': True, 'user_id': ObjectId(data['id'])})
             response['count_max_proxies'] = proxies.count_documents({})
-            count_banned_proxies = 0
-            # for i in proxies.find({}):
-            #     if ObjectId(data['id']) in i['ban_list']:
-            #         count_banned_proxies += 1
-            # response['count_banned_proxies'] = count_banned_proxies
             response['count_banned_proxies'] = proxies.count_documents({"ban_list": ObjectId(data['id'])})
             return response
         else:

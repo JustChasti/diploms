@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from config import my_host
 from forms.sign import LoginForm
+from source.server_reqs import sign_in, sign_up, get_user_info
 
 
 main_router = APIRouter()
@@ -28,66 +29,20 @@ async def main(request: Request):
     )
 
 
-@main_router.get('/login')
-async def login(request: Request):
-    return templates.TemplateResponse(
-        "login.html",
-        {
-            "request": request, 
-            "home": "/", 
-            "api": "/api",
-            "pricing": "/pricing",
-            "about": "/about",
-            "login": "/login",
-            "signup": "/signup",
-        }
-    )
-
-
-@main_router.get('/about')
-async def login(request: Request):
-    return templates.TemplateResponse(
-        "about.html",
-        {
-            "request": request, 
-            "home": "/", 
-            "api": "/api",
-            "pricing": "/pricing",
-            "about": "/about",
-            "login": "/login",
-            "signup": "/signup",
-        }
-    )
-
-
-@main_router.get('/signup')
-async def signup(request: Request):
-    return templates.TemplateResponse(
-        "registration.html",
-        {
-            "request": request, 
-            "home": "/", 
-            "api": "/api",
-            "pricing": "/pricing",
-            "about": "/about",
-            "login": "/login",
-            "signup": "/signup",
-        }
-    )
-
-
 @main_router.get('/api')
 async def signup(request: Request):
     access_token = request.cookies.get('access_token')
     refresh_token = request.cookies.get('refresh_token')
-    # здесь отправляем запрос на получение пользователя
-    # если он пишет что токен истек обновляем acces_token
-    if access_token and refresh_token:
-        user_login = 'chastytim@mail.ru'
-        user_id = 'abc1234dd'
-        tasks = 3
-        proxies = 5
-        proxies_max = 20
+    data = get_user_info(access_token, refresh_token)
+    if data:
+        if len(data) == 2:
+            access_token = data[1]
+        data = data[0]    
+        user_login = data['username']
+        user_id = data['id']
+        tasks = data['count_tasks']
+        proxies = data['count_banned_proxies']
+        proxies_max = data['count_max_proxies']
         return templates.TemplateResponse(
             "api.html",
             {
@@ -121,10 +76,11 @@ async def signup(request: Request):
 async def login_analys(request: Request):
     form = LoginForm(request)
     await form.load_data()
-    if form.login == 'chastytim@mail.ru':  # тут идет запрос к api
+    data = sign_in(form.login, form.password)
+    if data:
         response = RedirectResponse('/api', 303)
-        response.set_cookie(key="access_token", value="auth - jwt token")
-        response.set_cookie(key="refresh_token", value="refr - jwt token")
+        response.set_cookie(key="access_token", value=data[0])
+        response.set_cookie(key="refresh_token", value=data[1])
         return response
     return templates.TemplateResponse(
         "error.html",
@@ -140,17 +96,66 @@ async def login_analys(request: Request):
 async def signup_analys(request: Request):
     form = LoginForm(request)
     await form.load_data()
-    if form.login == 'chastytim@mail.ru':  # тут идет запрос к api
+    data = sign_up(form.login, form.password)
+    if data:
         response = RedirectResponse('/api', 303)
-        response.set_cookie(key="auth_token", value="auth - jwt token")
-        response.set_cookie(key="refr_token", value="refr - jwt token")
+        response.set_cookie(key="access_token", value=data[0])
+        response.set_cookie(key="refresh_token", value=data[1])
         return response
     return templates.TemplateResponse(
         "error.html",
         {
             "request": request, 
-            "error_name": "Ошибка 0", 
-            "error_text": "Текст ошибки 0",
+            "error_name": "Ошибка Создания пользователя", 
+            "error_text": "Скорее всего пользователь с таким именем уже существует",
+        }
+    )
+
+
+@main_router.get('/about')
+async def login(request: Request):
+    return templates.TemplateResponse(
+        "about.html",
+        {
+            "request": request, 
+            "home": "/", 
+            "api": "/api",
+            "pricing": "/pricing",
+            "about": "/about",
+            "login": "/login",
+            "signup": "/signup",
+        }
+    )
+
+
+@main_router.get('/login')
+async def login(request: Request):
+    return templates.TemplateResponse(
+        "login.html",
+        {
+            "request": request, 
+            "home": "/", 
+            "api": "/api",
+            "pricing": "/pricing",
+            "about": "/about",
+            "login": "/login",
+            "signup": "/signup",
+        }
+    )
+
+
+@main_router.get('/signup')
+async def signup(request: Request):
+    return templates.TemplateResponse(
+        "registration.html",
+        {
+            "request": request, 
+            "home": "/", 
+            "api": "/api",
+            "pricing": "/pricing",
+            "about": "/about",
+            "login": "/login",
+            "signup": "/signup",
         }
     )
 

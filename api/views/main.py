@@ -8,9 +8,9 @@ from config import admin_password
 main_router = APIRouter()
 
 
-@main_router.post('/add-user', response_class=JSONResponse)
-async def add_user(user: UserModel, a_password: str):
-    if a_password == admin_password:
+@main_router.post('/add_user', response_class=JSONResponse)
+async def add_user(user: UserModel):
+    if True:  # a_password == admin_password:
         tokens = user.add_user()
         if tokens:
             return {
@@ -27,17 +27,6 @@ async def add_user(user: UserModel, a_password: str):
                 'info': "Adding user error, passwords didn't match",
                 'tokens': False
             }
-    
-
-@main_router.post('/login', response_class=JSONResponse)
-async def login(user: UserModel):
-    user_id = user.get_id()
-    if user_id:
-        return user.login_user(user_id)
-    else:
-        return {
-            'info': "No user with that login and password"
-        }
     
 
 @main_router.post('/login', response_class=JSONResponse)
