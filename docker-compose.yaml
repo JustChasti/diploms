@@ -39,4 +39,4 @@ services:
     tty: True
     working_dir: /api
     ports:
-      - 8000:8000
+      - 4002:4002
