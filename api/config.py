@@ -7,7 +7,7 @@ load_dotenv()
 
 admin_password = 'Qwerty21'
 my_host = '0.0.0.0'
-base_host = 'localhost'
+base_host = 'mongodb'
 base_port = 27017
 client_name = 'balancer'
 login = os.getenv('LOGIN')
