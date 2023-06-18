@@ -35,6 +35,7 @@ def proxy_daemon():
         try:
             all_proxie = proxies.find({})
             for i in all_proxie:
+                logger.info(f"{i['address']} {i['port']} {i['in_use']} {i['active']}")
                 result = check(i['address'], i['port'])
                 if result:
                     proxies.update_one(filter={'_id': i['_id']}, update={'$set': {'active':True}})
