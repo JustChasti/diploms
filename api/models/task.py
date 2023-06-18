@@ -13,7 +13,7 @@ from fastapi.responses import JSONResponse, FileResponse
 
 from db.db import users, tasks
 from modules.decorators import default_decorator
-from config import rabbit_host, queue_tasks_name, page_dir
+from config import rabbit_host, queue_tasks_name, page_dir, encrytp_salt
 
 
 class TaskModel(BaseModel):
