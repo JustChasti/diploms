@@ -34,6 +34,7 @@ def assign_task(ch, method, properties, body):
             break
         else:
             sleep(1)
+    logger.info(task['task_id'])
     ac.run_in_thread(get_html(host, task))
 
 

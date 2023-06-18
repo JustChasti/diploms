@@ -1,4 +1,5 @@
 import codecs
+from loguru import logger
 from bson.objectid import ObjectId
 from datetime import datetime
 
@@ -26,6 +27,7 @@ async def get_html(host, task):
         encoding="utf−8"
     ) as file:
         file.write(data)
+    logger.info(f'Task {task["task_id"]} parsed')
     tasks.update_one(
         {'_id': ObjectId(task['task_id'])},
         {"$set": {
