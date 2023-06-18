@@ -11,6 +11,7 @@ from modules.decorators import default_decorator
 
 def check(server:str, port: int):
     session = requests.Session()
+    logger.info(f'http://{login}:{password}@{server}:{port}')
     proxy_servers = {
         'http': f'http://{login}:{password}@{server}:{port}',
         'https': f'http://{login}:{password}@{server}:{port}',
@@ -26,6 +27,7 @@ def check(server:str, port: int):
             logger.warning(response.status_code)
             return False
     except Exception as e:
+        logger.exception(e)
         return False
 
 
