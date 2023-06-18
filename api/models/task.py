@@ -13,7 +13,7 @@ from fastapi.responses import JSONResponse, FileResponse
 
 from db.db import users, tasks
 from modules.decorators import default_decorator
-from config import rabbit_host, queue_tasks_name, page_dir, encrytp_salt
+from config import rabbit_host, queue_tasks_name, page_dir, encrypt_salt
 
 
 class TaskModel(BaseModel):
@@ -43,7 +43,7 @@ class TaskModel(BaseModel):
             '_id': ObjectId(self.user_id),
             'password': bcrypt.hashpw(
                 self.password.encode('utf-8'),
-                encrytp_salt
+                encrypt_salt
             ).decode('utf-8')
         })
         if user:
