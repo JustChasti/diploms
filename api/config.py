@@ -10,8 +10,8 @@ my_host = '0.0.0.0'
 base_host = 'mongodb'
 base_port = 27017
 client_name = 'balancer'
-login = os.getenv('LOGIN')
-password = os.getenv('PASSWORD')
+login = 'chastinescape'
+password = 'PiLHz9R28T'
 encrypt_salt = b'$2b$08$yINtjjwcwMuOCM6/tHITRO'
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
