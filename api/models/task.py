@@ -104,7 +104,6 @@ class TaskModel(BaseModel):
                 'message': 'No users with this id and password'
             }
         id = self.add_to_base()
-        logger.info(id)
         if id:
             return self.add_to_rabbitmq(id)
         else:
