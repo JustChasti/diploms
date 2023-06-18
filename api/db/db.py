@@ -72,7 +72,7 @@ def get_available_proxy(user_id):
         for i in unused:
             if user_id not in i['ban_list']:
                 proxies.update_one({'_id': i['_id']}, {'$set':{'in_use': True}})
-                return {'address': i['address'], 'login': i['login'], 'password': password}
+                return {'address': i['address'], 'login': login, 'password': password}
     used = proxies.find(filter={
         'in_use': True,
         'active': True,
@@ -81,7 +81,7 @@ def get_available_proxy(user_id):
         for i in used:
             if user_id not in i['ban_list']:
                 proxies.update_one({'_id': i['_id']}, {'$set':{'last_used': datetime.now()}})
-                return {'address': i['address'], 'login': i['login'], 'password': password}
+                return {'address': i['address'], 'login': login, 'password': password}
     return {'address': '', 'login': '', 'password': ''}
 
 
