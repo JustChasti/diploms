@@ -1,7 +1,6 @@
 import json
 import bcrypt
 from datetime import datetime, timedelta
-import os
 from pathlib import Path
 
 from loguru import logger

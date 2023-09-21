@@ -1,7 +1,7 @@
 import bcrypt
 from pydantic import BaseModel, validator
 from bson import ObjectId
-from db.db import users, proxies, tasks
+from db.db import users, tasks
 from modules.decorators import default_decorator
 from config import encrypt_salt
 from models.token import Token, generate_ac_token, decode_token, check_valid_token
@@ -72,8 +72,6 @@ def get_user_data(access_token):
                 'username': user['username']
             }
             response['count_tasks'] = tasks.count_documents({'complete': False, 'user_id': data['id']})
-            response['count_max_proxies'] = proxies.count_documents({})
-            response['count_banned_proxies'] = proxies.count_documents({"ban_list": ObjectId(data['id'])})
             return response
         else:
             return {'info': 'token invalid'}

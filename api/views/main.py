@@ -41,7 +41,7 @@ async def login(user: UserModel):
     
 
 @main_router.get('/refresh', response_class=JSONResponse)
-async def login(refresh_token: str):
+async def refresh(refresh_token: str):
     access_token = generate_ac_token(refresh_token)
     return {'access_token': access_token}
 
